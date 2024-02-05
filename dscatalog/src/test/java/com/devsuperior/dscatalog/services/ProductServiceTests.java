@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.services;
 
 import com.devsuperior.dscatalog.repositories.ProductRepository;
+import com.devsuperior.dscatalog.services.exceptions.ControllerNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +30,10 @@ public class ProductServiceTests {
         idInexistente = 100000L;
         idDependente = 25L;
 
+        Mockito.doNothing().when(repository).deleteById(idExistente);
         Mockito.when(repository.existsById(idExistente)).thenReturn(true);
         Mockito.when(repository.existsById(idInexistente)).thenReturn(false);
         Mockito.when(repository.existsById(idDependente)).thenReturn(true);
-        Mockito.doNothing().when(repository).deleteById(idExistente);
     }
 
 
@@ -43,6 +44,14 @@ public class ProductServiceTests {
             service.delete(idExistente);
         });
 
+    }
+
+    @Test
+    public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+
+        Assertions.assertThrows(ControllerNotFoundException.class, () -> {
+            service.delete(idInexistente);
+        });
     }
 
 }
