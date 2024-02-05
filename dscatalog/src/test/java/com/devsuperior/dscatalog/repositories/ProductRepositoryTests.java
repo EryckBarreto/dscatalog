@@ -49,7 +49,7 @@ public class ProductRepositoryTests {
     public void findByIdDeveRetornarVazioSeIdNaoExistir() {
 
         Optional<Product> result = repository.findById(idInexistente);
-        Assertions.assertFalse(result.isPresent());
+        Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
